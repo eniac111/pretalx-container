@@ -49,7 +49,7 @@ jobs:
         uses: redhat-actions/push-to-registry@v2
         with:
           tags: ${{ steps.meta.outputs.tags }}
-          registry: ${{ env.REGISTRY }}
+          registry: "${{ env.REGISTRY }}/eniac111/"
           username: ${{ github.actor}}
           password: ${{ secrets.GITHUB_TOKEN }}
 
