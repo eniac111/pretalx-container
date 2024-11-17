@@ -1,0 +1,28 @@
+FROM registry.access.redhat.com/ubi9/python-312:9.5-1730553359
+
+USER root
+RUN dnf update -y \
+    && pip3 install --no-cache-dir --upgrade pip setuptools wheel gunicorn \
+    && mkdir -p /etc/pretalx /var/pretalx/data /var/pretalx/static \
+    && chown -R 1001:0 /etc/pretalx /var/pretalx/data /var/pretalx/static
+
+USER default
+
+RUN pip3 install --upgrade-strategy eager -U "pretalx[postgres,redis]"
+
+
+# Define volumes and expose port
+VOLUME ["/etc/pretalx", "/data", "/public"]
+EXPOSE 80
+
+# Set entrypoint and default command
+ENTRYPOINT ["pretalx"]
+CMD ["/opt/app-root/bin/gunicorn", \ 
+     "pretalx.wsgi", \
+     "--name", "pretalx", \
+     "--workers", "4", \
+     "--max-requests", "1200", \ 
+     "--max-requests-jitter", "50", \
+     "--log-level", "info", \
+     "--bind", "127.0.0.1:8345" \
+     ]
