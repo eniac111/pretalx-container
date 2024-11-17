@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: "eniac111/${{ github.repository }}"
   
 jobs:
   build-and-push-image:
@@ -48,7 +48,6 @@ jobs:
       - name: Push image
         uses: redhat-actions/push-to-registry@v2
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: ${{ steps.meta.outputs.tags }}
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor}}
