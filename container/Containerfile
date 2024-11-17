@@ -1,5 +1,9 @@
 FROM registry.access.redhat.com/ubi9/python-312:9.5-1730553359
 
+LABEL org.opencontainers.image.source=https://github.com/eniac111/pretalx-container
+LABEL org.opencontainers.image.description="Unofficical container image for pretalx"
+LABEL org.opencontainers.image.licenses=APACHE-2.0
+
 USER root
 RUN dnf update -y \
     && pip3 install --no-cache-dir --upgrade pip setuptools wheel gunicorn \
