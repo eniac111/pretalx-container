@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/python-312:9.5-1730553359
+FROM registry.access.redhat.com/ubi9/python-312@sha256:b642db8b1f0f9dca7bbe6999db7ac4c96cf3036833fc344af092268afbb02893
 
 LABEL org.opencontainers.image.source=https://github.com/eniac111/pretalx-container
 LABEL org.opencontainers.image.description="Unofficical container image for pretalx"
@@ -6,20 +6,17 @@ LABEL org.opencontainers.image.licenses=APACHE-2.0
 
 USER root
 RUN dnf update -y \
-    && pip3 install --no-cache-dir --upgrade pip setuptools wheel gunicorn \
     && mkdir -p /etc/pretalx /var/pretalx/data /var/pretalx/static \
     && chown -R 1001:0 /etc/pretalx /var/pretalx/data /var/pretalx/static
 
 USER default
 
-RUN pip3 install --upgrade-strategy eager -U "pretalx[postgres,redis]"
+RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel gunicorn \
+ && pip3 install --no-cache-dir --upgrade-strategy eager -U "pretalx[postgres,redis]"
 
-
-# Define volumes and expose port
-VOLUME ["/etc/pretalx", "/data", "/public"]
+VOLUME ["/etc/pretalx", "/var/pretalx/data", "/pretalx/static"]
 EXPOSE 80
 
-# Set entrypoint and default command
 ENTRYPOINT ["pretalx"]
 CMD ["/opt/app-root/bin/gunicorn", \ 
      "pretalx.wsgi", \
