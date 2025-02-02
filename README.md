@@ -1,2 +1,3 @@
 # pretalx-container
-Container image and configuration for Pretalx
+
+Unofficial container image and configuration for Pretalx
